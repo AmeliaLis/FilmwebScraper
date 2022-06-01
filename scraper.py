@@ -32,9 +32,9 @@ for place in places:
 director = page.find("div", {"data-type":"directing-info"}).find("span", {"itemprop":"name"}).get_text()
 scriptwriter = page.find("div", {"data-type":"screenwriting-info"}).find("span", {"itemprop":"name"}).get_text()
 
-#####
+##### aktorzy
 
-pageActorsUrl = "https://www.filmweb.pl/film/Doktor+Strange+w+multiwersum+obłędu-2022-836440" + "/cast/actors"
+pageActorsUrl = f"{url}" + "/cast/actors"
 response = requests.get(pageActorsUrl)
 
 pageActors = BeautifulSoup(response.text, "html.parser")
@@ -45,4 +45,22 @@ actorsArray = []
 for index in range(5):
     actorsArray.append(actors[index].get_text())
 
-print(actorsArray)
+##### opinie
+pageOpinionsUrl = f"{url}" + "/discussion"
+while(pageOpinionsUrl):
+    response = requests.get(pageOpinionsUrl)
+    pageOpinions = BeautifulSoup(response.text, "html.parser")
+
+    opinions = pageOpinions.find_all("li", {"class":"forumSection__item filmCategory"})
+
+    for opinion in opinions:
+        review = opinion.find("p", {"class":"forumSection__topicText"}).get_text()
+        print(review)
+    
+    try:
+        pageOpinionsUrl = pageOpinions.select_one("a.pagination__link").get("href")
+        print(pageOpinionsUrl)
+    except TypeError:
+        pageOpinionsUrl = None
+
+
