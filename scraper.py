@@ -46,7 +46,8 @@ for index in range(5):
     actorsArray.append(actors[index].get_text())
 
 ##### opinie
-pageOpinionsUrl = f"{url}" + "/discussion"
+pageOpinionsUrl = url + "/discussion"
+
 while(pageOpinionsUrl):
     response = requests.get(pageOpinionsUrl)
     pageOpinions = BeautifulSoup(response.text, "html.parser")
@@ -54,13 +55,12 @@ while(pageOpinionsUrl):
     opinions = pageOpinions.find_all("li", {"class":"forumSection__item filmCategory"})
 
     for opinion in opinions:
-        review = opinion.find("p", {"class":"forumSection__topicText"}).get_text()
+        review = opinion.find("p", {"class":"forumSection__topicText"}).get_text().strip()
         print(review)
-    
     try:
-        pageOpinionsUrl = pageOpinions.select_one("a.pagination__link").get("href")
+        pageOpinionsUrl = "https://www.filmweb.pl" + pageOpinions.find("a",{"title" : "następna"}).get("href")
         print(pageOpinionsUrl)
-    except TypeError:
+    except:
         pageOpinionsUrl = None
 
 
