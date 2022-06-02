@@ -52,11 +52,57 @@ while(pageOpinionsUrl):
     response = requests.get(pageOpinionsUrl)
     pageOpinions = BeautifulSoup(response.text, "html.parser")
 
-    opinions = pageOpinions.find_all("li", {"class":"forumSection__item filmCategory"})
+    opinions = pageOpinions.find_all("li", {"class":"forumSection__item"})
 
     for opinion in opinions:
-        review = opinion.find("p", {"class":"forumSection__topicText"}).get_text().strip()
-        print(review)
+
+        title = opinion.find("a", {"class":"forumSection__itemLink"}).get_text().strip()
+        print(title)
+
+        try:
+            review = opinion.find("p", {"class":"forumSection__topicText"}).get_text().strip()
+            if review == "Uwaga Spoiler! Ten temat może zawierać treści zdradzające fabułę.":
+                review = ""
+            print(review)
+        except:
+            review = None
+
+        try:
+            author = opinion.find("span", {"class":"forumSection__authorName"}).get_text().strip()
+            print(author)
+        except:
+            author = "użytkownik usunięty"
+
+        try:
+            stars = opinion.find("span", {"class":"forumSection__starsNo"}).get_text().strip()
+            if int(stars) > 1:
+                print(stars + " stars")
+            else:
+                print(stars + " star")
+        except:
+            stars = None
+
+        date = opinion.find("time").get_text()
+        print(date)
+
+        try:
+            likes = opinion.find("span", {"class":"plusMinusWidget__count"}).get_text().strip()
+            if int(likes) > 1:
+                print(likes + " likes")
+            else:
+                print(likes + " like")
+        except:
+            likes = None
+        
+        try:
+            comments = opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip()
+            if int(likes) > 1:
+                print(likes + " comments")
+            else:
+                print(likes + " comment")
+        except:
+            likes = None
+        print("\n")
     try:
         pageOpinionsUrl = "https://www.filmweb.pl" + pageOpinions.find("a",{"title" : "następna"}).get("href")
         print(pageOpinionsUrl)
