@@ -58,8 +58,8 @@ except:
     except:
         description = ""
 
-public_rating = page.select_one("span.filmRating__rateValue").get_text() #try find
-number_of_public_rating = page.select_one("span.filmRating__count").get_text().strip()
+public_rating = page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-rate")
+number_of_public_rating = page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-count")
 
 try:
     critics = page.find("div", {"data-source":"criticRatingData"}).get_text()
@@ -137,15 +137,16 @@ while(pageOpinionsUrl):
             comments = opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip()
         except:
             likes = None
-    allOpinions.append({
-        "title": title,
-        "review": review,
-        "author": author,
-        "stars": stars,
-        "date": date,
-        "likes": likes,
-        "comments": comments,
-    })
+
+        allOpinions.append({
+            "title": title,
+            "review": review,
+            "author": author,
+            "stars": stars,
+            "date": date,
+            "likes": likes,
+            "comments": comments,
+        })
     try:
         pageOpinionsUrl = "https://www.filmweb.pl" + pageOpinions.find("a",{"title" : "następna"}).get("href")
     except:
