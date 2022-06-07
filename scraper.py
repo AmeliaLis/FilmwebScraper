@@ -58,8 +58,8 @@ except:
     except:
         description = ""
 
-public_rating = page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-rate")
-number_of_public_rating = page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-count")
+public_rating = round(float(page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-rate")), 2)
+number_of_public_rating = int(page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-count"))
 
 try:
     critics = page.find("div", {"data-source":"criticRatingData"}).get_text()
@@ -122,19 +122,19 @@ while(pageOpinionsUrl):
             author = "użytkownik usunięty"
 
         try:
-            stars = opinion.find("span", {"class":"forumSection__starsNo"}).get_text().strip()
+            stars = int(opinion.find("span", {"class":"forumSection__starsNo"}).get_text().strip())
         except:
             stars = None
 
         date = opinion.find("time").get_text()
 
         try:
-            likes = opinion.find("span", {"class":"plusMinusWidget__count"}).get_text().strip()
+            likes = int(opinion.find("span", {"class":"plusMinusWidget__count"}).get_text().strip())
         except:
             likes = None
 
         try:
-            comments = opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip()
+            comments = int(opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip())
         except:
             likes = None
 
@@ -153,24 +153,24 @@ while(pageOpinionsUrl):
         pageOpinionsUrl = None
 
 filmweb_data = {
-    "info": {
-        "title_polish": title_polish,
-        "kind": kind,
-        "original_title": original_title,
-        "release_date": release_date,
-        "seasons": seasons["seasons"],
-        "genres": genres,
-        "description": description,
-        "public_rating": public_rating,
-        "number_of_public_rating": number_of_public_rating,
-        "critics": critics,
-        "director": director,
-        "creators": creators,
-        "scriptwriter": scriptwriter,
-        "actorsArray": actorsArray,
-    },
-    "allOpinions": allOpinions,
+    "title_polish": title_polish,
+    "kind": kind,
+    "original_title": original_title,
+    "release_date": release_date,
+    "seasons": seasons["seasons"],
+    "genres": genres,
+    "description": description,
+    "public_rating": public_rating,
+    "number_of_public_rating": number_of_public_rating,
+    "critics": critics,
+    "director": director,
+    "creators": creators,
+    "scriptwriter": scriptwriter,
+    "actorsArray": actorsArray,
 }
 
 with open(f"opinions/{id_url}.json", "w", encoding ="UTF-8") as jf:
+    json.dump(allOpinions, jf, indent=4, ensure_ascii=False)
+
+with open(f"information/{id_url}_info.json", "w", encoding ="UTF-8") as jf:
     json.dump(filmweb_data, jf, indent=4, ensure_ascii=False)
