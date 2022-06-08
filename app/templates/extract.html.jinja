@@ -1,0 +1,29 @@
+{% extends "base.html.jinja" %}
+
+{% block content%}
+<div style="height=100vh">
+    <section class="text-dark p-4 text-center">
+        <div class="container-fluid mx-auto" style="width: 800px;">
+            <div style="font-size: 4em">Pobierz opinie z Filmwebu</div>
+        </div>
+        <div class="container-fluid mx-auto">
+            <p style="width: 650px;" class="container lead my-4 text-center">
+            Wklej link z Filmwebu, który prowadzi do wybranego filmu, czy serialu. Sprawdź sam!
+            </p>
+        <div>
+        <form method="POST">
+            <div style="justify-content: center;" class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <label for="product_id" class="col-form-label">Link:</label>
+                </div>
+                <div class="col-auto">
+                    <input style="min-width:45vw" type="text" id="product_id" name="product_id" class="form-control">
+                </div>
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-outline-warning" value="Pobierz">
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock content%}
