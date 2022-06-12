@@ -3,27 +3,27 @@
 {% block content%}
 <div style="height=100vh">
     <section class="text-dark p-4 text-center">
-        <div class="mx-auto" style="width:800px; background-color: #f0b710;">
+        <div class="mx-auto" style="width:800px; background-color: #f0b710; border-radius:15px">
             <div class="container-fluid mx-auto" style="width: 500px;">
                 <div style="font-size: 4em">Filmweb Scraper</div>
             </div>
             <div class="container-fluid mx-auto">
                 <p style="width: 650px;" class="container lead p-2 my-4 text-center">
-                Zapisuj dowolone filmy i seriale oraz sprawdzaj ich opinie wraz ze statystykami. Kliknij na przycisk niżej i zobacz sam!
+                Save any movies or series and check their opinions with statistics. Click on the button below and see for yourself!
                 </p>
             </div>
         </div>
             <div>
-                <h2 style="margin-bottom: 15px">Pobierz opinie z Filmwebu</h2>
+                <h2 style="margin-bottom: 15px">Download reviews from Filmweb</h2>
             </div>
             <div style="margin-bottom: 20px" class="d-grid gap-2 col-3 mx-auto">
-                <a href="{{url_for('extract')}}"><button class="btn btn-warning" type="button">Przejdź do formularza</button></a>
+                <a href="{{url_for('extract')}}"><button class="btn btn-warning" type="button">Go to the form</button></a>
             </div>
     </section>
 
-    <section style="background-color: #F1F1F1; padding:20px 20px 20px 20px;" class="text-dark text-center">
+    <section style="background: rgb(241,241,241); background: linear-gradient(0deg, rgba(241,241,241,1) 93%, rgba(201,201,201,1) 100%); padding:20px 20px 20px 20px;" class="text-dark text-center">
         <div class="container-fluid mx-auto" style="width: 700px;">
-            <h2 style="margin-bottom: 5px">Twoje dotychczas dodane filmy i seriale:</h2>
+            <h2 style="margin-bottom: 5px">Your movies and series added so far:</h2>
         </div>
         
         <div class="row p-2">
