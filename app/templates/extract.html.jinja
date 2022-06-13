@@ -11,16 +11,16 @@
             Paste the link from Filmweb that leads to the selected movie or series. Check on your own!
             </p>
         <div>
-        <form method="POST">
+        <form action="/extract" method="POST">
             <div style="justify-content: center;" class="row g-2 align-items-center">
                 <div class="col-auto">
-                    <label for="product_id" class="col-form-label">Link:</label>
+                    <label for="movie_url" class="col-form-label">Link:</label>
                 </div>
                 <div class="col-auto">
-                    <input style="min-width:45vw" type="text" id="product_id" name="product_id" class="form-control">
+                    <input style="min-width:45vw" type="text" id="movie_url" name="movie_url" class="form-control">
                 </div>
                 <div class="col-auto">
-                    <input type="submit" class="btn btn-outline-warning" value="Pobierz">
+                    <input type="submit" class="btn btn-outline-warning" value="Download">
                 </div>
             </div>
         </form>
