@@ -2,8 +2,19 @@ from urllib import response
 import requests
 import json
 from bs4 import BeautifulSoup
+import ast
 
 class Movie():
+    def __init__(self, id=0):
+        self.id = id
+        self.filmweb_data = []
+    
+    def array_to_string(self, array):
+        string = ""
+        for item in array:
+            string += f"{str(item)},"
+        return string
+
     def download_information(self,url):
         response = requests.get(url)
         id_url = int(url.split("-")[-1])
@@ -24,15 +35,14 @@ class Movie():
         try:
             release_date = page.select_one("span.block").get_text().strip()
         except:
-            release_date = None
+            release_date = ""
 
-        if release_date == None:
+        if release_date == "":
             seasons = page.find("div", {"data-source":"seasonsOrYears"}).get_text()
-            seasons = json.loads(seasons)
+            seasons = len(json.loads(seasons))
+            
         else:
-            seasons = {
-                "seasons": [],
-            }
+            seasons = 0
 
         try:
             span_genres = page.find("div", {"itemprop":"genre"}).find_all("span")
@@ -40,16 +50,18 @@ class Movie():
             for span_genre in span_genres:
                 if span_genre.get_text() != " / ":
                     genres.append(span_genre.get_text())
+            genres = self.array_string(genres)
         except:
-            genres = []
+            genres = ""
 
         try:
             div_genres = page.find("div", {"itemprop":"genre"}).find_all("a")
             genres = []
             for a in div_genres:
                 genres.append(a.get_text())
+            genres = self.array_string(genres)
         except:
-            genres = []
+            genres = ""
 
         try:
             description = page.select_one("div.filmPosterSection__plot").find("span").get_text()
@@ -59,14 +71,15 @@ class Movie():
             except:
                 description = ""
 
-        public_rating = round(float(page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-rate")), 2)
-        number_of_public_rating = int(page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-count"))
+        public_rating = str(round(float(page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-rate")), 2))
+        number_of_public_rating = str(page.find("div", {"class":"filmRating filmRating--hasPanel"}).get("datarating-count"))
 
         try:
             critics = page.find("div", {"data-source":"criticRatingData"}).get_text()
             critics = json.loads(critics)
+            critics = str(critics)
         except:
-            critics = None
+            critics = ""
 
         try:
             director = page.find("div", {"data-type":"directing-info"}).find("span", {"itemprop":"name"}).get_text()
@@ -78,13 +91,14 @@ class Movie():
             creators = []
             for div_creator in div_creators:
                 creators.append(div_creator.get_text())
+            creators = self.array_to_string(creators)
         except:
             creators = ""
 
         try:
             scriptwriter = page.find("div", {"data-type":"screenwriting-info"}).find("span", {"itemprop":"name"}).get_text()
         except:
-            scriptwriter = None
+            scriptwriter = ""
 
         pageActorsUrl = f"{url}" + "/cast/actors"
         response = requests.get(pageActorsUrl)
@@ -96,6 +110,7 @@ class Movie():
 
         for actor in actors:
             actorsArray.append(actor.get_text())
+        actorsArray = self.array_to_string(actorsArray)
 
         ##### opinie
         pageOpinionsUrl = url + "/discussion"
@@ -115,7 +130,7 @@ class Movie():
                     if review == "Uwaga Spoiler! Ten temat może zawierać treści zdradzające fabułę.":
                         review = ""
                 except:
-                    review = None
+                    review = ""
 
                 try:
                     author = opinion.find("span", {"class":"forumSection__authorName"}).get_text().strip()
@@ -123,21 +138,21 @@ class Movie():
                     author = "użytkownik usunięty"
 
                 try:
-                    stars = int(opinion.find("span", {"class":"forumSection__starsNo"}).get_text().strip())
+                    stars = opinion.find("span", {"class":"forumSection__starsNo"}).get_text().strip()
                 except:
-                    stars = None
+                    stars = ""
 
                 date = opinion.find("time").get_text()
 
                 try:
-                    likes = int(opinion.find("span", {"class":"plusMinusWidget__count"}).get_text().strip())
+                    likes = opinion.find("span", {"class":"plusMinusWidget__count"}).get_text().strip()
                 except:
-                    likes = None
+                    likes = ""
 
                 try:
-                    comments = int(opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip())
+                    comments = opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip()
                 except:
-                    likes = None
+                    likes = ""
 
                 allOpinions.append({
                     "title": title,
@@ -151,14 +166,15 @@ class Movie():
             try:
                 pageOpinionsUrl = "https://www.filmweb.pl" + pageOpinions.find("a",{"title" : "następna"}).get("href")
             except:
-                pageOpinionsUrl = None
+                pageOpinionsUrl = ""
 
         filmweb_data = {
+            "id_url": id_url,
             "title_polish": title_polish,
             "kind": kind,
             "original_title": original_title,
             "release_date": release_date,
-            "seasons": seasons["seasons"],
+            "seasons": seasons,
             "genres": genres,
             "description": description,
             "public_rating": public_rating,
@@ -168,15 +184,18 @@ class Movie():
             "creators": creators,
             "scriptwriter": scriptwriter,
             "actorsArray": actorsArray,
+            "allOpinions":self.array_to_string(allOpinions)
         }
+        self.filmweb_data = filmweb_data
+        # with open(f"opinions/{id_url}.json", "w", encoding ="UTF-8") as jf:
+        #     json.dump(allOpinions, jf, indent=4, ensure_ascii=False)
 
-        with open(f"opinions/{id_url}.json", "w", encoding ="UTF-8") as jf:
-            json.dump(allOpinions, jf, indent=4, ensure_ascii=False)
+        # with open(f"information/{id_url}_info.json", "w", encoding ="UTF-8") as jf:
+        #     json.dump(filmweb_data, jf, indent=4, ensure_ascii=False)
 
-        with open(f"information/{id_url}_info.json", "w", encoding ="UTF-8") as jf:
-            json.dump(filmweb_data, jf, indent=4, ensure_ascii=False)
 
-        return id_url
+
+        return self.filmweb_data
     
     def get_information(self,id_url):
         with open(f"./opinions/{id_url}.json", "r", encoding ="UTF-8") as jf:
@@ -186,3 +205,8 @@ class Movie():
             filmweb_data = json.load(jf)
 
         return {"filmweb_data":filmweb_data, "opinions":opinions}
+
+movie = Movie()
+allOpinions = movie.download_information("https://www.filmweb.pl/film/Doktor+Strange+w+multiwersum+obłędu-2022-836440")["allOpinions"]
+
+d = ast.literal_eval(allOpinions)
