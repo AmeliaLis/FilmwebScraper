@@ -140,7 +140,7 @@ class Movie():
                 try:
                     stars = opinion.find("span", {"class":"forumSection__starsNo"}).get_text().strip()
                 except:
-                    stars = ""
+                    stars = "0"
 
                 date = opinion.find("time").get_text()
 
@@ -206,7 +206,7 @@ class Movie():
 
         return {"filmweb_data":filmweb_data, "opinions":opinions}
 
-movie = Movie()
-allOpinions = movie.download_information("https://www.filmweb.pl/film/Doktor+Strange+w+multiwersum+obłędu-2022-836440")["allOpinions"]
+#movie = Movie()
+#allOpinions = movie.download_information("https://www.filmweb.pl/film/Doktor+Strange+w+multiwersum+obłędu-2022-836440")["allOpinions"]
 
-d = ast.literal_eval(allOpinions)
+#d = ast.literal_eval(allOpinions)

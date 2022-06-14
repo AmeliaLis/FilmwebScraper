@@ -2,9 +2,8 @@
 
 {% block content%}
 <P>strona filmu</p>
-<p>{{movie_id}}</p>
-<p>{{filmweb_data.title_polish}}</p>
-<img src="{{url_for('static', filename=chart)}}" width="450px" height="450px" class="img-fluid text-center">
+<p>{{title}}</p>
+<img src="{{url_for('static', filename=image_url)}}" width="450px" height="450px" class="img-fluid text-center">
 <p>dane filmu</p>
 <p>wykres po prawej</p>
 <p> i na dole wszystkie opinie po kolei</p>
