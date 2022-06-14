@@ -3,9 +3,10 @@ import os
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+import matplotlib
 
+matplotlib.use('Agg')
 def save_chart(movie_id):
-
     file = open(f"opinions/{movie_id}.json", encoding="utf-8")
     opinions = pd.read_json(file)
 
