@@ -16,7 +16,6 @@ def save_chart(allOpinions, id_url):
     file = open(f"temp_chart_date.json", encoding="UTF-8")
     opinions = pd.read_json(file)
     
-    print(opinions["stars"])
     opinions["stars"] = opinions["stars"].map(lambda x: int(x))
 
     stars = opinions["stars"].value_counts().sort_index().reindex(list(np.arange(1,11,1)), fill_value=0)

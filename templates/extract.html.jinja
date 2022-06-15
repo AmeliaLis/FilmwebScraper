@@ -2,6 +2,12 @@
 
 {% block content%}
 <div style="height=100vh">
+{% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-heartbreak-fill"></i> <strong>{{error}}</strong>
+            <button type="button" class="btn-close data" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
     <section class="text-dark p-4 text-center">
         <div class="container-fluid mx-auto" style="width: 800px;">
             <div style="font-size: 4em">Download reviews from Filmweb</div>

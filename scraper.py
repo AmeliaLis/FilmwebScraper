@@ -8,6 +8,7 @@ class Movie():
     def __init__(self, id=0):
         self.id = id
         self.filmweb_data = []
+        self.url = ""
     
     def array_to_string(self, array):
         string = ""
@@ -17,6 +18,7 @@ class Movie():
 
     def download_information(self,url):
         response = requests.get(url)
+        self.url= url
         id_url = int(url.split("-")[-1])
         page = BeautifulSoup(response.text, "html.parser")
 
@@ -39,18 +41,17 @@ class Movie():
 
         if release_date == "":
             seasons = page.find("div", {"data-source":"seasonsOrYears"}).get_text()
-            seasons = len(json.loads(seasons))
+            seasons = len(json.loads(seasons)["seasons"])
             
         else:
             seasons = 0
-
         try:
             span_genres = page.find("div", {"itemprop":"genre"}).find_all("span")
             genres = []
             for span_genre in span_genres:
                 if span_genre.get_text() != " / ":
                     genres.append(span_genre.get_text())
-            genres = self.array_string(genres)
+            genres = self.array_to_string(genres)
         except:
             genres = ""
 
@@ -59,7 +60,7 @@ class Movie():
             genres = []
             for a in div_genres:
                 genres.append(a.get_text())
-            genres = self.array_string(genres)
+            genres = self.array_to_string(genres)
         except:
             genres = ""
 
@@ -169,6 +170,7 @@ class Movie():
                 pageOpinionsUrl = ""
 
         filmweb_data = {
+            "url":url,
             "id_url": id_url,
             "title_polish": title_polish,
             "kind": kind,
@@ -187,26 +189,4 @@ class Movie():
             "allOpinions":self.array_to_string(allOpinions)
         }
         self.filmweb_data = filmweb_data
-        # with open(f"opinions/{id_url}.json", "w", encoding ="UTF-8") as jf:
-        #     json.dump(allOpinions, jf, indent=4, ensure_ascii=False)
-
-        # with open(f"information/{id_url}_info.json", "w", encoding ="UTF-8") as jf:
-        #     json.dump(filmweb_data, jf, indent=4, ensure_ascii=False)
-
-
-
         return self.filmweb_data
-    
-    def get_information(self,id_url):
-        with open(f"./opinions/{id_url}.json", "r", encoding ="UTF-8") as jf:
-            opinions = json.load(jf)
-        
-        with open(f"./information/{id_url}_info.json", "r", encoding ="UTF-8") as jf:
-            filmweb_data = json.load(jf)
-
-        return {"filmweb_data":filmweb_data, "opinions":opinions}
-
-#movie = Movie()
-#allOpinions = movie.download_information("https://www.filmweb.pl/film/Doktor+Strange+w+multiwersum+obłędu-2022-836440")["allOpinions"]
-
-#d = ast.literal_eval(allOpinions)

@@ -2,9 +2,30 @@
 
 {% block content%}
 <P>strona filmu</p>
-<p>{{title}}</p>
+<p>{{movie["title_polish"]}}</p>
+<p>{{movie["seasons"]}}</p>
+
+{%for genre in genres%}
+<span>{{genre}}</span>
+{% endfor %}
+
 <img src="{{url_for('static', filename=image_url)}}" width="450px" height="450px" class="img-fluid text-center">
 <p>dane filmu</p>
 <p>wykres po prawej</p>
 <p> i na dole wszystkie opinie po kolei</p>
+<a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-outline-danger">JSON</a>
+
+
+<div class="row p-2">
+    {% for opinion in allOpinions  %}
+    <div class="col-sm-6 p-2">
+        <div class="card" style="min-height:168px">
+            <div class="card-body">
+                <h5 class="card-title">{{opinion["title"]}}</h5>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock content%}
