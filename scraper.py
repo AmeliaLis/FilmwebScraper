@@ -13,7 +13,7 @@ class Movie():
     def array_to_string(self, array):
         string = ""
         for item in array:
-            string += f"{str(item)},"
+            string += f"{str(item)}, "
         return string
 
     def download_information(self,url):

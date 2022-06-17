@@ -94,8 +94,12 @@ def information(id_url):
         if movie.id_url == str(id_url):
             allOpinions = ast.literal_eval(movie.allOpinions)
             genres = string_to_array(movie.genres)
+            if movie.kind == "Film":
+                information1 = "Data premiery: " + movie.release_date
+            else:
+                information1 = "Liczba sezonów: " + movie.seasons
 
-            return render_template("information.html.jinja", movie=movie, image_url = f'/plots/{id_url}_stars.png', allOpinions = allOpinions, genres = genres)
+            return render_template("information.html.jinja", movie=movie, image_url = f'/plots/{id_url}_stars.png', allOpinions = allOpinions, genres = genres, information1 = information1)
 
     return render_template("index.html.jinja") 
 

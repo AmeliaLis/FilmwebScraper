@@ -1,15 +1,39 @@
 {% extends "base.html.jinja" %}
 
 {% block content%}
+<div class="post-heading text-center">
+    <div style="font-size: 3em">{{movie["title_polish"]}}</div>
+        <div style="font-size: 1.5em; color:grey">{{movie["original_title"]}}</div>
+        <hr class="w-50 mx-auto pb-4">
+</div>
+<div class="container">
+    <div class="row d-flex justify-content-center mx-auto">
+        <div class="col-6">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Rodzaj: {{movie["kind"]}}</li>
+                <li class="list-group-item">{{information1}}</li>
+                <li class="list-group-item">Gatunek: {{movie.genres}}</li>
+                <li class="list-group-item">Opis: {{movie["description"]}}</li>
+                <li class="list-group-item">And a fifth one</li>
+            </ul>
+        </div>
+        <div class="col-5">
+            <img src="{{url_for('static', filename=image_url)}}" width="600px" height="600px" class="img-fluid text-center">
+        </div>
+        <div class="col-1">
+        <p> hej </p>
+        </div>
+    </div>
+</div>
 <P>strona filmu</p>
-<p>{{movie["title_polish"]}}</p>
+<p></p>
 <p>{{movie["seasons"]}}</p>
 
 {%for genre in genres%}
 <span>{{genre}}</span>
 {% endfor %}
 
-<img src="{{url_for('static', filename=image_url)}}" width="450px" height="450px" class="img-fluid text-center">
+
 <p>dane filmu</p>
 <p>wykres po prawej</p>
 <p> i na dole wszystkie opinie po kolei</p>
