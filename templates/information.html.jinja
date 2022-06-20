@@ -2,7 +2,7 @@
 
 {% block content%}
 <div class="post-heading text-center">
-    <div style="font-size: 3em">{{movie["title_polish"]}}</div>
+    <a href='{{movie.url}}' target="_blank" style="color: black; text-decoration: none; font-size: 3em">{{movie["title_polish"]}}</a>
         <div style="font-size: 1.5em; color:grey">{{movie["original_title"]}}</div>
         <hr class="w-50 mx-auto pb-4">
 </div>
@@ -14,42 +14,50 @@
                 <li class="list-group-item">{{information1}}</li>
                 <li class="list-group-item">Gatunek: {{movie.genres}}</li>
                 <li class="list-group-item">Opis: {{movie["description"]}}</li>
-                <li class="list-group-item">And a fifth one</li>
+                <li class="list-group-item">{{information2}}</li>
             </ul>
         </div>
         <div class="col-5">
             <img src="{{url_for('static', filename=image_url)}}" width="600px" height="600px" class="img-fluid text-center">
         </div>
         <div class="col-1">
-        <p> hej </p>
+        <a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-outline-danger">JSON</a>
+        <p> Liczba recenzji: {{allOpinions|length}} </p>
         </div>
     </div>
 </div>
-<P>strona filmu</p>
-<p></p>
-<p>{{movie["seasons"]}}</p>
+<div>
+<section style="background: rgb(241,241,241); box-shadow: inset 0px 11px 42px -23px rgba(66, 68, 90, 1); padding:20px 20px 20px 20px; min-height:70vh"  class="text-dark text-center">
+    <div class="container-fluid mx-auto" style="width: 700px;">
+        <h2 style="margin-bottom: 5px">Recenzje {{movie.title_polish}}</h2>
+    </div>
+        
+    <div class="row p-2">
+        {% for opinion in allOpinions  %}
+        <div class="col-sm-6 p-2">
+            <div class="card" style="min-height:168px">
+                <div class="card-body">
+                    <div style="display:flex; flex-direction: row; justify-content: space-between; gap:5px">
+                        <div style="text-align: left"><a target = "_blank" href='{{opinion["opinion_url"]}}' style="font-weight: bold; font-size: 20px; text-decoration: none; text-align: left" class="card-title text-warning">{{opinion["title"]}}</a></div>
+                        <div style="display: flex; flex-wrap: nowrap; gap: 5px">
+                            <img src="{{url_for('static', filename='star-empty.svg')}}" width="22px" height="22px">
+                            {{opinion["stars"]}}
+                            <img src="{{url_for('static', filename='like.svg')}}" width="22px" height="22px">
+                            {{opinion["likes"]}}
+                            <img src="{{url_for('static', filename='comment.svg')}}" width="22px" height="22px">
+                            {{opinion["comments"]}}
+                        </div>
+                    </div>
 
-{%for genre in genres%}
-<span>{{genre}}</span>
-{% endfor %}
-
-
-<p>dane filmu</p>
-<p>wykres po prawej</p>
-<p> i na dole wszystkie opinie po kolei</p>
-<a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-outline-danger">JSON</a>
-
-
-<div class="row p-2">
-    {% for opinion in allOpinions  %}
-    <div class="col-sm-6 p-2">
-        <div class="card" style="min-height:168px">
-            <div class="card-body">
-                <h5 class="card-title">{{opinion["title"]}}</h5>
+                    <div style="text-align: left">
+                        <p class="card-text">{{opinion["review"]}}</p>
+                    </div>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+</section>
 </div>
 
 {% endblock content%}

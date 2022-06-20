@@ -125,11 +125,13 @@ class Movie():
             opinions = pageOpinions.find_all("li", {"class":"forumSection__item"})
 
             for opinion in opinions:
+                opinion_url = "https://www.filmweb.pl" + opinion.find("a", {"class":"forumSection__itemLink"}).get("href").strip()
+                print(opinion_url)
                 title = opinion.find("a", {"class":"forumSection__itemLink"}).get_text().strip()
                 try:
                     review = opinion.find("p", {"class":"forumSection__topicText"}).get_text().strip()
                     if review == "Uwaga Spoiler! Ten temat może zawierać treści zdradzające fabułę.":
-                        review = ""
+                        review = "Recenzja zawierała spoilery."
                 except:
                     review = ""
 
@@ -148,14 +150,15 @@ class Movie():
                 try:
                     likes = opinion.find("span", {"class":"plusMinusWidget__count"}).get_text().strip()
                 except:
-                    likes = ""
+                    likes = "0"
 
                 try:
                     comments = opinion.find("span", {"class":"forumSection__commentsCount"}).get_text().strip()
                 except:
-                    likes = ""
+                    comments = "0"
 
                 allOpinions.append({
+                    "opinion_url": opinion_url,
                     "title": title,
                     "review": review,
                     "author": author,

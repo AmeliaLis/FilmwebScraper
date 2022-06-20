@@ -96,10 +96,12 @@ def information(id_url):
             genres = string_to_array(movie.genres)
             if movie.kind == "Film":
                 information1 = "Data premiery: " + movie.release_date
+                information2 = "Reżyser: " + movie.director + "; Autor scenariusza: " + movie.scriptwriter
             else:
                 information1 = "Liczba sezonów: " + movie.seasons
+                information2 = "Twórcy: " + movie.creators
 
-            return render_template("information.html.jinja", movie=movie, image_url = f'/plots/{id_url}_stars.png', allOpinions = allOpinions, genres = genres, information1 = information1)
+            return render_template("information.html.jinja", movie=movie, image_url = f'/plots/{id_url}_stars.png', allOpinions = allOpinions, genres = genres, information1 = information1, information2= information2)
 
     return render_template("index.html.jinja") 
 
