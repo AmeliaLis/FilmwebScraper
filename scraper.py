@@ -126,7 +126,6 @@ class Movie():
 
             for opinion in opinions:
                 opinion_url = "https://www.filmweb.pl" + opinion.find("a", {"class":"forumSection__itemLink"}).get("href").strip()
-                print(opinion_url)
                 title = opinion.find("a", {"class":"forumSection__itemLink"}).get_text().strip()
                 try:
                     review = opinion.find("p", {"class":"forumSection__topicText"}).get_text().strip()
@@ -157,16 +156,17 @@ class Movie():
                 except:
                     comments = "0"
 
-                allOpinions.append({
-                    "opinion_url": opinion_url,
-                    "title": title,
-                    "review": review,
-                    "author": author,
-                    "stars": stars,
-                    "date": date,
-                    "likes": likes,
-                    "comments": comments,
-                })
+                if review != "":
+                    allOpinions.append({
+                        "opinion_url": opinion_url,
+                        "title": title,
+                        "review": review,
+                        "author": author,
+                        "stars": stars,
+                        "date": date,
+                        "likes": likes,
+                        "comments": comments,
+                    })
             try:
                 pageOpinionsUrl = "https://www.filmweb.pl" + pageOpinions.find("a",{"title" : "następna"}).get("href")
             except:

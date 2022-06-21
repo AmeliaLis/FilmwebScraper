@@ -6,7 +6,7 @@
         <div style="font-size: 1.5em; color:grey">{{movie["original_title"]}}</div>
         <hr class="w-50 mx-auto pb-4">
 </div>
-<div class="container">
+<div class="container p-3">
     <div class="row d-flex justify-content-center mx-auto">
         <div class="col-6">
             <ul class="list-group list-group-flush">
@@ -21,15 +21,18 @@
             <img src="{{url_for('static', filename=image_url)}}" width="600px" height="600px" class="img-fluid text-center">
         </div>
         <div class="col-1">
-        <a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-outline-danger">JSON</a>
-        <p> Liczba recenzji: {{allOpinions|length}} </p>
+            <a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-outline-danger">JSON</a>
+            <p> Liczba recenzji: {{allOpinions|length}} </p>
+            <div>{{movie.number_of_public_rating}} </div>
+            <div>{{movie.public_rating}}</div>
+            <div>{{critics["rate"]}}; {{critics["count"]}}</div>
         </div>
     </div>
 </div>
 <div>
 <section style="background: rgb(241,241,241); box-shadow: inset 0px 11px 42px -23px rgba(66, 68, 90, 1); padding:20px 20px 20px 20px; min-height:70vh"  class="text-dark text-center">
-    <div class="container-fluid mx-auto" style="width: 700px;">
-        <h2 style="margin-bottom: 5px">Recenzje {{movie.title_polish}}</h2>
+    <div class="container-fluid mx-auto" style="width: calc(160px + 40vw);">
+        <h2 style="margin-bottom: 5px">Recenzje {{movie.title_polish}}:</h2>
     </div>
         
     <div class="row p-2">
@@ -49,9 +52,15 @@
                         </div>
                     </div>
 
-                    <div style="text-align: left">
+                    <div style="text-align: left; padding-bottom: 20px">
                         <p class="card-text">{{opinion["review"]}}</p>
                     </div>
+
+                    <div style="position: absolute; bottom: 10px; right: 15px; display:flex; flex-direction: row; gap: 10px; font-weight: bold;">
+                        <div class="card-text">{{opinion["author"]}}</div>
+                        <div class="card-text">{{opinion["date"]}}</div>
+                    </div>
+
                 </div>
             </div>
         </div>

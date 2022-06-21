@@ -3,27 +3,27 @@
 {% block content%}
 <div>
     <section class="text-dark p-4 text-center">
-        <div class="mx-auto" style="width: calc(200px + 40vw); background-color: #f0b710; border-radius:15px">
+        <div class="mx-auto" style="width: calc(200px + 40vw); background-color: #f0b710; border-radius:15px; box-shadow: 0px 0px 23px -1px rgba(66, 68, 90, 1);">
             <div class="container-fluid mx-auto">
-                <div class="fs-1 text-center">Filmweb Scraper</div>
+                <h1 class="fs-1 text-center" style="padding-top: 25px">Filmweb Scraper</h1>
             </div>
             <div class="container-fluid mx-auto">
-                <p style="width:calc(160px + 40vw);" class="container lead p-2 my-4 text-center">
-                Save any movies or series and check their opinions with statistics. Click on the button below and see for yourself!
+                <p style="width:calc(160px + 40vw);" class="lead p-2 my-4 text-center">
+                Zapisuj dowolne filmy lub seriale oraz sprawdzaj ich opinie ze statystykami. Kliknij w poniższy przycisk i przekonaj się sam!
                 </p>
             </div>
         </div>
             <div>
-                <h2 style="margin-bottom: 15px">Download reviews from Filmweb</h2>
+                <h2 style="margin-bottom: 15px">Pobierz opinie z Filmweb</h2>
             </div>
             <div style="margin-bottom: 20px" class="d-grid gap-2 col-3 mx-auto">
-                <a href="{{url_for('extract')}}"><button class="btn btn-warning" type="button">Go to the form</button></a>
+                <a href="{{url_for('extract')}}"><button class="btn btn-warning" type="button">Przejdź do formularza</button></a>
             </div>
     </section>
 
-    <section style="background: rgb(241,241,241); background: linear-gradient(0deg, rgba(241,241,241,1) 93%, rgba(201,201,201,1) 100%); padding:20px 20px 20px 20px; min-height:70vh"  class="text-dark text-center">
-        <div class="container-fluid mx-auto" style="width: 700px;">
-            <h2 style="margin-bottom: 5px">Your movies and series added so far:</h2>
+    <section style="background: rgb(241,241,241); box-shadow: inset 0px 11px 42px -23px rgba(66, 68, 90, 1); padding:20px 20px 20px 20px; min-height:70vh"  class="text-dark text-center">
+        <div class="container-fluid mx-auto" style="width: calc(160px + 40vw);">
+            <h2 style="margin-bottom: 5px">Twoje dotychczas dodane filmy i seriale:</h2>
         </div>
         
         <div class="row p-2">
@@ -33,8 +33,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{movie["title_polish"]}}</h5>
                         <p class="card-text">{{movie["description"]}}</p>
-                        <a href="/information/{{movie['id_url']}}" class="btn btn-warning">Visit page</a>
-                        <a href="/delete/{{movie['id_url']}}" class="btn btn-outline-warning">Delete</a>
+                        <a href="/information/{{movie['id_url']}}" class="btn btn-warning">Odzwiedź stronę</a>
+                        <a href="/delete/{{movie['id_url']}}" class="btn btn-outline-warning">Usuń</a>
                     </div>
                 </div>
             </div>

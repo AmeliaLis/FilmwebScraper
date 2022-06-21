@@ -22,6 +22,7 @@ class Filmweb(db.Model):
     seasons = db.Column(db.String(200), nullable=False)
     genres = db.Column(db.String(200), nullable=False)
     description = db.Column(db.String(200), nullable=False)
+    public_rating = db.Column(db.String(200), nullable=False)
     number_of_public_rating = db.Column(db.String(200), nullable=False)
     critics = db.Column(db.String(200), nullable=False)
     director = db.Column(db.String(200), nullable=False)
@@ -59,6 +60,7 @@ def extract():
             seasons = movie_dict["seasons"]
             genres = movie_dict["genres"]
             description = movie_dict["description"]
+            public_rating = movie_dict["public_rating"]
             number_of_public_rating = movie_dict["number_of_public_rating"]
             critics = movie_dict["critics"]
             director = movie_dict["director"]
@@ -74,7 +76,7 @@ def extract():
                     return render_template("information.html.jinja", movie=prev_movie, image_url = f'/plots/{id_url}_stars.png')
 
             current_movie = Filmweb(url=url, id_url=id_url, title_polish=title_polish, kind=kind, original_title=original_title, release_date=release_date, 
-            seasons=seasons, genres=genres, description=description, number_of_public_rating=number_of_public_rating, critics=critics, director=director, 
+            seasons=seasons, genres=genres, description=description, public_rating=public_rating, number_of_public_rating=number_of_public_rating, critics=critics, director=director, 
             creators=creators, scriptwriter=scriptwriter, actorsArray=actorsArray, allOpinions=allOpinions)
 
             db.session.add(current_movie)
@@ -94,6 +96,7 @@ def information(id_url):
         if movie.id_url == str(id_url):
             allOpinions = ast.literal_eval(movie.allOpinions)
             genres = string_to_array(movie.genres)
+            critics = ast.literal_eval(movie.critics)
             if movie.kind == "Film":
                 information1 = "Data premiery: " + movie.release_date
                 information2 = "Reżyser: " + movie.director + "; Autor scenariusza: " + movie.scriptwriter
@@ -101,7 +104,7 @@ def information(id_url):
                 information1 = "Liczba sezonów: " + movie.seasons
                 information2 = "Twórcy: " + movie.creators
 
-            return render_template("information.html.jinja", movie=movie, image_url = f'/plots/{id_url}_stars.png', allOpinions = allOpinions, genres = genres, information1 = information1, information2= information2)
+            return render_template("information.html.jinja", movie=movie, image_url = f'/plots/{id_url}_stars.png', allOpinions = allOpinions, genres = genres, critics=critics, information1 = information1, information2= information2)
 
     return render_template("index.html.jinja") 
 
