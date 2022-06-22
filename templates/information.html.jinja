@@ -8,8 +8,8 @@
 </div>
 <div class="container p-3">
     <div class="row d-flex justify-content-center mx-auto">
-        <div class="col-6">
-            <ul class="list-group list-group-flush">
+        <div class="col-7">
+            <ul class="list-group list-group-flush fs-5">
                 <li class="list-group-item">Rodzaj: {{movie["kind"]}}</li>
                 <li class="list-group-item">{{information1}}</li>
                 <li class="list-group-item">Gatunek: {{movie.genres}}</li>
@@ -20,16 +20,26 @@
         <div class="col-5">
             <img src="{{url_for('static', filename=image_url)}}" width="600px" height="600px" class="img-fluid text-center">
         </div>
-        <div class="col-1">
-            <a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-outline-danger">JSON</a>
-            <p> Liczba recenzji: {{allOpinions|length}} </p>
-            <div>{{movie.number_of_public_rating}} </div>
-            <div>{{movie.public_rating}}</div>
-            <div>{{critics["rate"]}}; {{critics["count"]}}</div>
-        </div>
     </div>
 </div>
-<div>
+<div class="col-12 container-fluid mx-auto p-3 fs-5" style="display: flex; flex-direction: row; justify-content: center; gap: 30px; align-items:center">
+    <div>
+        Liczba recenzji: {{allOpinions|length}}
+    </div>
+    <div>
+        Liczba publicznych ocen: {{movie.number_of_public_rating}}
+    </div>
+    <div>
+        Średnia ocena: {{movie.public_rating}}
+    </div>
+    <div>
+        Liczba recenzji krytyków: {{critics["count"]}}
+    </div>
+    <div>
+        Średnia ocena krytyków: {{critics["rate"]}}
+    </div>
+    <div><a href="/get_json/{{movie['id_url']}}" target = "_blank" class="btn btn-warning">JSON</a></div>
+</div>
 <section style="background: rgb(241,241,241); box-shadow: inset 0px 11px 42px -23px rgba(66, 68, 90, 1); padding:20px 20px 20px 20px; min-height:70vh"  class="text-dark text-center">
     <div class="container-fluid mx-auto" style="width: calc(160px + 40vw);">
         <h2 style="margin-bottom: 5px">Recenzje {{movie.title_polish}}:</h2>
