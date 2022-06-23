@@ -1,8 +1,6 @@
-from urllib import response
 import requests
 import json
 from bs4 import BeautifulSoup
-import ast
 
 class Movie():
     def __init__(self, id=0):
@@ -10,12 +8,14 @@ class Movie():
         self.filmweb_data = []
         self.url = ""
     
+    #Pomocnicza funkcja do zamiany tablicy na tekst, przy tworzeniu informacji, które można wykorzystać w bazie danych
     def array_to_string(self, array):
         string = ""
         for item in array:
             string += f"{str(item)}, "
         return string
 
+    #Główna funkcja do zbierania (scrapowania) danych ze strony na temat filmu lub serialu
     def download_information(self,url):
         response = requests.get(url)
         self.url= url
@@ -27,7 +27,10 @@ class Movie():
         except:
             kind = ""
 
-        title_polish = page.select_one("h1.filmCoverSection__title").get_text()
+        try:
+            title_polish = page.select_one("h1.filmCoverSection__title").get_text()
+        except:
+            title_polish = ""
 
         try:
             original_title = page.select_one("div.filmCoverSection__originalTitle").get_text() 
@@ -42,18 +45,18 @@ class Movie():
         if release_date == "":
             seasons = page.find("div", {"data-source":"seasonsOrYears"}).get_text()
             seasons = len(json.loads(seasons)["seasons"])
-            
         else:
             seasons = 0
-        try:
-            span_genres = page.find("div", {"itemprop":"genre"}).find_all("span")
-            genres = []
-            for span_genre in span_genres:
-                if span_genre.get_text() != " / ":
-                    genres.append(span_genre.get_text())
-            genres = self.array_to_string(genres)
-        except:
-            genres = ""
+
+        # try:
+        #     span_genres = page.find("div", {"itemprop":"genre"}).find_all("span")
+        #     genres = []
+        #     for span_genre in span_genres:
+        #         if span_genre.get_text() != " / ":
+        #             genres.append(span_genre.get_text())
+        #     genres = self.array_to_string(genres)
+        # except:
+        #     genres = ""
 
         try:
             div_genres = page.find("div", {"itemprop":"genre"}).find_all("a")
@@ -113,7 +116,7 @@ class Movie():
             actorsArray.append(actor.get_text())
         actorsArray = self.array_to_string(actorsArray)
 
-        ##### opinie
+        #Pobieranie opinii
         pageOpinionsUrl = url + "/discussion"
 
         allOpinions = []
@@ -125,6 +128,7 @@ class Movie():
             opinions = pageOpinions.find_all("li", {"class":"forumSection__item"})
 
             for opinion in opinions:
+                #Link do aktualnej opinii
                 opinion_url = "https://www.filmweb.pl" + opinion.find("a", {"class":"forumSection__itemLink"}).get("href").strip()
                 title = opinion.find("a", {"class":"forumSection__itemLink"}).get_text().strip()
                 try:
@@ -172,7 +176,7 @@ class Movie():
             except:
                 pageOpinionsUrl = ""
 
-        filmweb_data = {
+        self.filmweb_data = {
             "url":url,
             "id_url": id_url,
             "title_polish": title_polish,
@@ -191,5 +195,4 @@ class Movie():
             "actorsArray": actorsArray,
             "allOpinions":self.array_to_string(allOpinions)
         }
-        self.filmweb_data = filmweb_data
         return self.filmweb_data

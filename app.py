@@ -1,6 +1,5 @@
-from re import T
 from flask import render_template, request, redirect, Flask, Response
-from scraper import Movie
+from movie import Movie
 from analyzer import save_chart
 import json
 from flask_sqlalchemy import SQLAlchemy
@@ -11,6 +10,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///filmweb.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
+#Klasa, która tworzy strukturę bazy danych
 class Filmweb(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     url =db.Column(db.String(200),  nullable=False)
@@ -31,9 +31,11 @@ class Filmweb(db.Model):
     actorsArray = db.Column(db.String(200), nullable=False)
     allOpinions = db.Column(db.String(200), nullable=False)
 
+#Pomocnicza funkcja
 def string_to_array(string):
     return string.split(",")
 
+#Route do strony głównej, która przekazuje dodatkowo wszystkie dotychczas przekazane dane na temat filmów lub seriali z bazy danych
 @app.route('/')
 def index():
     movies = Filmweb.query.all()
@@ -71,7 +73,6 @@ def extract():
 
             prev_movies = Filmweb.query.all()
             for prev_movie in prev_movies:
-                print(prev_movie.id_url)
                 if prev_movie.id_url == str(id_url):
                     return render_template("information.html.jinja", movie=prev_movie, image_url = f'/plots/{id_url}_stars.png')
 
@@ -113,7 +114,7 @@ def delete(id_url):
     movies = Filmweb.query.all()
     for movie in movies:
         if movie.id_url == str(id_url):
-            filmweb_id = movie.id
+            filmweb_id = movie.id #id w bazie danych (kolejność filmu)
     movie_to_delete = Filmweb.query.get_or_404(filmweb_id)
     db.session.delete(movie_to_delete)
     db.session.commit()
