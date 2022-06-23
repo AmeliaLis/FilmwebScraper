@@ -42,10 +42,10 @@ class Movie():
         except:
             release_date = ""
 
-        if release_date == "":
+        try:
             seasons = page.find("div", {"data-source":"seasonsOrYears"}).get_text()
             seasons = len(json.loads(seasons)["seasons"])
-        else:
+        except:
             seasons = 0
 
         # try:
@@ -83,7 +83,7 @@ class Movie():
             critics = json.loads(critics)
             critics = str(critics)
         except:
-            critics = ""
+            critics = "0"
 
         try:
             director = page.find("div", {"data-type":"directing-info"}).find("span", {"itemprop":"name"}).get_text()
